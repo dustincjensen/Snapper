@@ -1,8 +1,12 @@
 # Snapper
-A hotkey driven window manager. Move the active window without your mouse.
+A hotkey driven window manager for Windows. Move the active window without your mouse.
 
 ## Goal
 Provide the ability to organize your windows via the numpad.
+
+## Platforms
+- Windows 10
+- Windows 7,8 (not tested)
 
 ## How to use
 1. Select a window
@@ -24,3 +28,8 @@ Provide the ability to organize your windows via the numpad.
 - **Ctrl** + **Alt** + 7 = Top Left
 - **Ctrl** + **Alt** + 8 = Top Mid
 - **Ctrl** + **Alt** + 9 = Top Right
+
+## Starting on Log in
+1. Press **Win+R** to bring up the run prompt.
+2. Type **shell:startup** and press enter.
+3. Copy a shortcut of the Snapper.exe into the folder.
