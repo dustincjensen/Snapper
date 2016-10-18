@@ -6,7 +6,7 @@ Provide the ability to organize your windows via the numpad.
 
 ## Platforms
 - Windows 10
-- Windows 7,8 (not tested)
+- Windows 7, 8 (not tested)
 
 ## How to use
 1. Select a window
