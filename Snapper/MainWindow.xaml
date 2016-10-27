@@ -7,6 +7,7 @@
     xmlns:local="clr-namespace:Snapper"
     mc:Ignorable="d"
     Title="Snapper" 
+    DataContext="{Binding RelativeSource={RelativeSource Self}}"
     Height="350" Width="525"
     MinHeight="250" MinWidth="450"
     Background="#222">
@@ -14,6 +15,8 @@
     <Grid VerticalAlignment="Stretch" Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" VerticalAlignment="Center">
@@ -24,5 +27,31 @@
                     To get started, use Ctrl + Alt and the number pad.
             </TextBlock>
         </StackPanel>
+        
+        <Grid Grid.Row="1" Margin="50,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock 
+                Grid.Row="0" Grid.Column="0" 
+                Foreground="LightGray" Margin="0,0,10,0" 
+                Text="Swap Monitors"/>
+            <Button 
+                Grid.Row="0" Grid.Column="1" 
+                Content="{Binding SwapMonitorsKeyBind, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                Click="UpdateSwapMonitor_OnClick"
+                PreviewKeyDown="UpdateSwapMonitor_KeyModifiers"
+                PreviewKeyUp="UpdateSwapMonitor_KeyBind"/>
+            
+        </Grid>
+                
     </Grid>
 </Window>
