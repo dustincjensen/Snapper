@@ -1,0 +1,31 @@
+﻿<UserControl 
+  x:Class="Snapper.Views.KeyBindings"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+  xmlns:local="clr-namespace:Snapper.Views"
+  mc:Ignorable="d" 
+  d:DataContext="{d:DesignInstance local:KeyBindingsModel}"
+  d:DesignWidth="300">
+    
+  <Grid Margin="15,0,15,10">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="Auto" SharedSizeGroup="LabelColumn"/>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+
+    <TextBlock
+      Grid.Column="0"
+      Foreground="LightGray" Margin="0,0,10,0" HorizontalAlignment="Right"
+      Text="{Binding Label, Mode=OneTime, UpdateSourceTrigger=PropertyChanged}"/>
+    <Button
+      Grid.Column="1"
+      Content="{Binding Display, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+      Click="OnClick"
+      PreviewKeyDown="KeyModifiers"
+      PreviewKeyUp="KeyBind"/>
+
+  </Grid>
+  
+</UserControl>

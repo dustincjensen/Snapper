@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Snapper.Views;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
 namespace Snapper
@@ -25,6 +26,8 @@ namespace Snapper
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        private List<KeyBindings> _keyBindingsList;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -41,16 +44,16 @@ namespace Snapper
         }
         
 
-        private Hotkeys.GlobalHotKey _numpad1_HotKey;
-        private Hotkeys.GlobalHotKey _numpad2_HotKey;
-        private Hotkeys.GlobalHotKey _numpad3_HotKey;
-        private Hotkeys.GlobalHotKey _numpad4_HotKey;
-        private Hotkeys.GlobalHotKey _numpad5_HotKey;
-        private Hotkeys.GlobalHotKey _numpad6_HotKey;
-        private Hotkeys.GlobalHotKey _numpad7_HotKey;
-        private Hotkeys.GlobalHotKey _numpad8_HotKey;
-        private Hotkeys.GlobalHotKey _numpad9_HotKey;
-        private Hotkeys.GlobalHotKey _swapMonitor_HotKey;
+        //private Hotkeys.GlobalHotKey _numpad1_HotKey;
+        //private Hotkeys.GlobalHotKey _numpad2_HotKey;
+        //private Hotkeys.GlobalHotKey _numpad3_HotKey;
+        //private Hotkeys.GlobalHotKey _numpad4_HotKey;
+        //private Hotkeys.GlobalHotKey _numpad5_HotKey;
+        //private Hotkeys.GlobalHotKey _numpad6_HotKey;
+        //private Hotkeys.GlobalHotKey _numpad7_HotKey;
+        //private Hotkeys.GlobalHotKey _numpad8_HotKey;
+        //private Hotkeys.GlobalHotKey _numpad9_HotKey;
+        //private Hotkeys.GlobalHotKey _swapMonitor_HotKey;
 
         private void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
         {
@@ -60,37 +63,41 @@ namespace Snapper
             //WindowState = WindowState.Minimized;
         }
 
-        private void _LoadHotkeys()
+        public List<KeyBindings> KeyBindingsList
         {
-            _numpad1_HotKey = new Hotkeys.GlobalHotKey(ModifierKeys.Control | ModifierKeys.Alt, Key.NumPad1, this);
-            _numpad2_HotKey = new Hotkeys.GlobalHotKey(ModifierKeys.Control | ModifierKeys.Alt, Key.NumPad2, this);
-            _numpad3_HotKey = new Hotkeys.GlobalHotKey(ModifierKeys.Control | ModifierKeys.Alt, Key.NumPad3, this);
-            _numpad4_HotKey = new Hotkeys.GlobalHotKey(ModifierKeys.Control | ModifierKeys.Alt, Key.NumPad4, this);
-            _numpad5_HotKey = new Hotkeys.GlobalHotKey(ModifierKeys.Control | ModifierKeys.Alt, Key.NumPad5, this);
-            _numpad6_HotKey = new Hotkeys.GlobalHotKey(ModifierKeys.Control | ModifierKeys.Alt, Key.NumPad6, this);
-            _numpad7_HotKey = new Hotkeys.GlobalHotKey(ModifierKeys.Control | ModifierKeys.Alt, Key.NumPad7, this);
-            _numpad8_HotKey = new Hotkeys.GlobalHotKey(ModifierKeys.Control | ModifierKeys.Alt, Key.NumPad8, this);
-            _numpad9_HotKey = new Hotkeys.GlobalHotKey(ModifierKeys.Control | ModifierKeys.Alt, Key.NumPad9, this);
-            _numpad1_HotKey.HotKeyPressed += _MoveWindowOnHotKeyPressed;
-            _numpad2_HotKey.HotKeyPressed += _MoveWindowOnHotKeyPressed;
-            _numpad3_HotKey.HotKeyPressed += _MoveWindowOnHotKeyPressed;
-            _numpad4_HotKey.HotKeyPressed += _MoveWindowOnHotKeyPressed;
-            _numpad5_HotKey.HotKeyPressed += _MoveWindowOnHotKeyPressed;
-            _numpad6_HotKey.HotKeyPressed += _MoveWindowOnHotKeyPressed;
-            _numpad7_HotKey.HotKeyPressed += _MoveWindowOnHotKeyPressed;
-            _numpad8_HotKey.HotKeyPressed += _MoveWindowOnHotKeyPressed;
-            _numpad9_HotKey.HotKeyPressed += _MoveWindowOnHotKeyPressed;
+            get { return _keyBindingsList; }
+            private set
+            {
+                _keyBindingsList = value;
+                OnPropertyChanged();
+            }
         }
 
-        private void _ToggleWindowMonitorOnHotKeyPressed(Hotkeys.GlobalHotKey globalHotKey)
+        private void _LoadHotkeys()
         {
-            if (EditingSwapMonitor) return;
+            // TODO, MoveWindow still checks for Numpad1, 2 , 3 etc...
+            KeyBindingsList = new List<KeyBindings>
+            {
+                new KeyBindings {Label = "Swap Monitors", HotKeyAction = ToggleWindowMonitorOnHotKeyPressed},
+                new KeyBindings {Label = "Bottom Left", HotKeyAction = MoveWindowOnHotKeyPressed},
+                new KeyBindings {Label = "Bottom", HotKeyAction = MoveWindowOnHotKeyPressed},
+                new KeyBindings {Label = "Bottom Right", HotKeyAction = MoveWindowOnHotKeyPressed},
+                new KeyBindings {Label = "Left", HotKeyAction = MoveWindowOnHotKeyPressed},
+                new KeyBindings {Label = "Mid", HotKeyAction = MoveWindowOnHotKeyPressed},
+                new KeyBindings {Label = "Right", HotKeyAction = MoveWindowOnHotKeyPressed},
+                new KeyBindings {Label = "Top Left", HotKeyAction = MoveWindowOnHotKeyPressed},
+                new KeyBindings {Label = "Top", HotKeyAction = MoveWindowOnHotKeyPressed},
+                new KeyBindings {Label = "Top Right", HotKeyAction = MoveWindowOnHotKeyPressed},
+            };
+        }
+
+        public void ToggleWindowMonitorOnHotKeyPressed(Hotkeys.GlobalHotKey globalHotKey)
+        {
             MoveActiveWindow.ToggleWindowMonitor();
         }
 
-        private void _MoveWindowOnHotKeyPressed(Hotkeys.GlobalHotKey globalHotKey)
+        public void MoveWindowOnHotKeyPressed(Hotkeys.GlobalHotKey globalHotKey)
         {
-            if (EditingSwapMonitor) return;
             MoveActiveWindow.MoveWindow(globalHotKey);
         }
 
@@ -128,104 +135,11 @@ namespace Snapper
             };
         }
 
-        private string _swapMonitorsKeyBind;
-        public string SwapMonitorsKeyBind
-        {
-            get { return _swapMonitorsKeyBind; }
-            set
-            {
-                _swapMonitorsKeyBind = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private bool _editingSwapMonitor;
-        public bool EditingSwapMonitor
-        {
-            get { return _editingSwapMonitor; }
-            set
-            {
-                _editingSwapMonitor = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private void UpdateSwapMonitor_OnClick(object sender, RoutedEventArgs e)
-        {
-            EditingSwapMonitor = true;
-            if (_swapMonitor_HotKey != null)
-            {
-                _swapMonitor_HotKey.UnregisterHotKey();
-                _swapMonitor_HotKey.HotKeyPressed -= _ToggleWindowMonitorOnHotKeyPressed;
-            }
-            SwapMonitorsKeyBind = "";
-        }
-
-        private ModifierKeys _modifierKeys = ModifierKeys.None;
-        private void UpdateSwapMonitor_KeyModifiers(object sender, KeyEventArgs e)
-        {
-            if (!EditingSwapMonitor) return;
-
-            SwapMonitorsKeyBind = "";
-            _modifierKeys = ModifierKeys.None;
-
-            if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
-            {
-                _modifierKeys = _modifierKeys | ModifierKeys.Control;
-                SwapMonitorsKeyBind = "Ctrl";
-            }
-
-            if ((Keyboard.Modifiers & ModifierKeys.Alt) == ModifierKeys.Alt)
-            {
-                _modifierKeys = _modifierKeys | ModifierKeys.Alt;
-                SwapMonitorsKeyBind = String.IsNullOrWhiteSpace(SwapMonitorsKeyBind)
-                    ? "Alt" : SwapMonitorsKeyBind + "+Alt";
-            }
-
-            if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
-            {
-                _modifierKeys = _modifierKeys | ModifierKeys.Shift;
-                SwapMonitorsKeyBind = String.IsNullOrWhiteSpace(SwapMonitorsKeyBind)
-                    ? "Shift" : SwapMonitorsKeyBind + "+Shift";
-            }
-        }
-
-        private void UpdateSwapMonitor_KeyBind(object sender, KeyEventArgs e)
-        {
-            if (!EditingSwapMonitor) return;
-
-            // key is your real pressed key
-            var key = e.Key != Key.System ? e.Key : e.SystemKey;            
-                       
-            if (key == Key.LeftCtrl || key == Key.RightCtrl ||
-                key == Key.LeftAlt || key == Key.RightAlt ||
-                key == Key.LeftShift || key == Key.RightShift)
-            {
-                return;
-            }
-
-            SwapMonitorsKeyBind = !String.IsNullOrWhiteSpace(SwapMonitorsKeyBind) 
-                ? SwapMonitorsKeyBind + "+" + key : key.ToString();
-
-            try
-            {
-                _swapMonitor_HotKey = new Hotkeys.GlobalHotKey(_modifierKeys, key, this);
-                _swapMonitor_HotKey.HotKeyPressed += _ToggleWindowMonitorOnHotKeyPressed;
-            }
-            catch (ApplicationException)
-            {
-                SwapMonitorsKeyBind = "Error: Taken";
-                return;
-            }
-
-            EditingSwapMonitor = false;
-        }
-
-
         public event PropertyChangedEventHandler PropertyChanged;
+
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }        
+        }
     }
 }
