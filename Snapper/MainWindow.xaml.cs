@@ -75,30 +75,29 @@ namespace Snapper
 
         private void _LoadHotkeys()
         {
-            // TODO, MoveWindow still checks for Numpad1, 2 , 3 etc...
             KeyBindingsList = new List<KeyBindings>
             {
-                new KeyBindings {Label = "Swap Monitors", HotKeyAction = ToggleWindowMonitorOnHotKeyPressed},
-                new KeyBindings {Label = "Bottom Left", HotKeyAction = MoveWindowOnHotKeyPressed},
-                new KeyBindings {Label = "Bottom", HotKeyAction = MoveWindowOnHotKeyPressed},
-                new KeyBindings {Label = "Bottom Right", HotKeyAction = MoveWindowOnHotKeyPressed},
-                new KeyBindings {Label = "Left", HotKeyAction = MoveWindowOnHotKeyPressed},
-                new KeyBindings {Label = "Mid", HotKeyAction = MoveWindowOnHotKeyPressed},
-                new KeyBindings {Label = "Right", HotKeyAction = MoveWindowOnHotKeyPressed},
-                new KeyBindings {Label = "Top Left", HotKeyAction = MoveWindowOnHotKeyPressed},
-                new KeyBindings {Label = "Top", HotKeyAction = MoveWindowOnHotKeyPressed},
-                new KeyBindings {Label = "Top Right", HotKeyAction = MoveWindowOnHotKeyPressed},
+                new KeyBindings {Label = "Swap Monitors", HotKeyAction = ToggleWindowMonitorOnHotKeyPressed, Purpose = KeyBindEnum.SwapMonitor},
+                new KeyBindings {Label = "Bottom Left", HotKeyAction = MoveWindowOnHotKeyPressed, Purpose = KeyBindEnum.BottomLeft},
+                new KeyBindings {Label = "Bottom", HotKeyAction = MoveWindowOnHotKeyPressed, Purpose = KeyBindEnum.Bottom},
+                new KeyBindings {Label = "Bottom Right", HotKeyAction = MoveWindowOnHotKeyPressed, Purpose = KeyBindEnum.BottomRight},
+                new KeyBindings {Label = "Left", HotKeyAction = MoveWindowOnHotKeyPressed, Purpose = KeyBindEnum.Left},
+                new KeyBindings {Label = "Mid", HotKeyAction = MoveWindowOnHotKeyPressed, Purpose = KeyBindEnum.Mid},
+                new KeyBindings {Label = "Right", HotKeyAction = MoveWindowOnHotKeyPressed, Purpose = KeyBindEnum.Right},
+                new KeyBindings {Label = "Top Left", HotKeyAction = MoveWindowOnHotKeyPressed, Purpose = KeyBindEnum.TopLeft},
+                new KeyBindings {Label = "Top", HotKeyAction = MoveWindowOnHotKeyPressed, Purpose = KeyBindEnum.Top},
+                new KeyBindings {Label = "Top Right", HotKeyAction = MoveWindowOnHotKeyPressed, Purpose = KeyBindEnum.TopRight}
             };
         }
 
-        public void ToggleWindowMonitorOnHotKeyPressed(Hotkeys.GlobalHotKey globalHotKey)
+        public void ToggleWindowMonitorOnHotKeyPressed(KeyBindEnum purpose)
         {
             MoveActiveWindow.ToggleWindowMonitor();
         }
 
-        public void MoveWindowOnHotKeyPressed(Hotkeys.GlobalHotKey globalHotKey)
+        public void MoveWindowOnHotKeyPressed(KeyBindEnum purpose)
         {
-            MoveActiveWindow.MoveWindow(globalHotKey);
+            MoveActiveWindow.MoveWindow(purpose);
         }
 
         /// <summary>

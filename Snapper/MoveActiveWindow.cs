@@ -85,7 +85,7 @@ namespace Snapper
             SetWindowPos(handle, 0, newX, activeWindow.Y, 0,0, SWP.NOSIZE | SWP.SHOWWINDOW);
         }
 
-        public static void MoveWindow(GlobalHotKey hotKey)
+        public static void MoveWindow(KeyBindEnum purpose)
         {
             IntPtr handle = GetForegroundWindow();
             if (handle == IntPtr.Zero)
@@ -96,7 +96,7 @@ namespace Snapper
 
             Rectangle workingArea = Screen.FromHandle(handle).WorkingArea;
             var windowDimension = _GetActiveWindowDimensions(handle);
-            var positionDimension = _GetWindowPositionPlusDimensions(hotKey, workingArea, windowDimension);
+            var positionDimension = _GetWindowPositionPlusDimensions(purpose, workingArea, windowDimension);
                                    
             SetWindowPos(handle, 0, 
                 positionDimension.Left - 7, 
@@ -131,47 +131,47 @@ namespace Snapper
             public int Height;
         }
 
-        private static PositionDimension _GetWindowPositionPlusDimensions(GlobalHotKey hotKey, Rectangle workingArea, Rectangle windowDimensions)
+        private static PositionDimension _GetWindowPositionPlusDimensions(KeyBindEnum purpose, Rectangle workingArea, Rectangle windowDimensions)
         {
             var positionDimension = new PositionDimension
             {
-                Top = _GetTop(hotKey, workingArea),
-                Height = _GetHeight(hotKey, workingArea),
+                Top = _GetTop(purpose, workingArea),
+                Height = _GetHeight(purpose, workingArea),
                 // adding the workingArea.X handles multi monitors situations.
-                Left = _GetLeft(hotKey, workingArea, windowDimensions) + workingArea.X,
-                Width = _GetWidth(hotKey, workingArea, windowDimensions)
+                Left = _GetLeft(purpose, workingArea, windowDimensions) + workingArea.X,
+                Width = _GetWidth(purpose, workingArea, windowDimensions)
             };
             return positionDimension;
         }
 
-        private static int _GetTop(GlobalHotKey hotKey, Rectangle workingArea)
+        private static int _GetTop(KeyBindEnum purpose, Rectangle workingArea)
         {
-            if (hotKey.Key == Key.NumPad1 || hotKey.Key == Key.NumPad2 || hotKey.Key == Key.NumPad3)
+            if (purpose == KeyBindEnum.BottomLeft || purpose == KeyBindEnum.Bottom || purpose == KeyBindEnum.BottomRight)
             {
                 return workingArea.Height/2;
             }
             return 0;
         }
 
-        private static int _GetHeight(GlobalHotKey hotKey, Rectangle workingArea)
+        private static int _GetHeight(KeyBindEnum purpose, Rectangle workingArea)
         {
-            if (hotKey.Key == Key.NumPad4 || hotKey.Key == Key.NumPad5 || hotKey.Key == Key.NumPad6)
+            if (purpose == KeyBindEnum.Left || purpose == KeyBindEnum.Mid || purpose == KeyBindEnum.Right)
             {
                 return workingArea.Height;
             }
             return workingArea.Height / 2;            
         }
 
-        private static int _GetLeft(GlobalHotKey hotKey, Rectangle workingArea, Rectangle windowDimensions)
+        private static int _GetLeft(KeyBindEnum purpose, Rectangle workingArea, Rectangle windowDimensions)
         {
             var third = workingArea.Width / 3;
             var half = workingArea.Width / 2;
 
-            if (hotKey.Key == Key.NumPad1 || hotKey.Key == Key.NumPad4 || hotKey.Key == Key.NumPad7)
+            if (purpose == KeyBindEnum.BottomLeft || purpose == KeyBindEnum.Left || purpose == KeyBindEnum.TopLeft)
             {
                 return 0;
             }
-            if (hotKey.Key == Key.NumPad2 || hotKey.Key == Key.NumPad5 || hotKey.Key == Key.NumPad8)
+            if (purpose == KeyBindEnum.Bottom || purpose == KeyBindEnum.Mid || purpose == KeyBindEnum.Top)
             {
                 if (windowDimensions.Width >= workingArea.Width)
                 {
@@ -183,7 +183,7 @@ namespace Snapper
                 }
                 return 0;
             }
-            if (hotKey.Key == Key.NumPad3 || hotKey.Key == Key.NumPad6 || hotKey.Key == Key.NumPad9)
+            if (purpose == KeyBindEnum.BottomRight || purpose == KeyBindEnum.Right || purpose == KeyBindEnum.TopRight)
             {
                 if (windowDimensions.Width >= third*2)
                 {
@@ -199,12 +199,12 @@ namespace Snapper
             return -1;
         }
 
-        private static int _GetWidth(GlobalHotKey hotKey, Rectangle workingArea, Rectangle windowDimensions)
+        private static int _GetWidth(KeyBindEnum purpose, Rectangle workingArea, Rectangle windowDimensions)
         {
             var third = workingArea.Width / 3;
             var half = workingArea.Width / 2;
 
-            if (hotKey.Key == Key.NumPad2 || hotKey.Key == Key.NumPad5 || hotKey.Key == Key.NumPad8)
+            if (purpose == KeyBindEnum.Bottom || purpose == KeyBindEnum.Mid || purpose == KeyBindEnum.Top)
             {            
                 if (windowDimensions.Width >= workingArea.Width)
                 {

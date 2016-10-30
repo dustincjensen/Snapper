@@ -27,7 +27,7 @@ namespace Snapper.Views
             InitializeComponent();
             Loaded += (sender, args) =>
             {
-                _vm = new KeyBindingsModel(Label, HotKeyAction);
+                _vm = new KeyBindingsModel(Label, HotKeyAction, Purpose);
                 DataContext = _vm;
             };
         }
@@ -41,14 +41,23 @@ namespace Snapper.Views
         public static readonly DependencyProperty LabelProperty = 
             DependencyProperty.Register("Label", typeof(string), typeof(KeyBindings));
 
-        public Action<Hotkeys.GlobalHotKey> HotKeyAction
+        public Action<KeyBindEnum> HotKeyAction
         {
-            get { return (Action<Hotkeys.GlobalHotKey>)GetValue(HotKeyActionProperty); }
+            get { return (Action<KeyBindEnum>)GetValue(HotKeyActionProperty); }
             set { SetValue(HotKeyActionProperty, value); }
         }
 
         public static readonly DependencyProperty HotKeyActionProperty =
-            DependencyProperty.Register("HotKeyAction", typeof(Action<Hotkeys.GlobalHotKey>), typeof(KeyBindings));
+            DependencyProperty.Register("HotKeyAction", typeof(Action<KeyBindEnum>), typeof(KeyBindings));
+
+        public KeyBindEnum Purpose
+        {
+            get { return (KeyBindEnum) GetValue(PurposeProperty); }
+            set { SetValue(PurposeProperty, value); }
+        }
+
+        public static readonly DependencyProperty PurposeProperty = 
+            DependencyProperty.Register("Purpose", typeof(KeyBindEnum), typeof(KeyBindings));
 
         public void OnClick(object sender, RoutedEventArgs e)
         {

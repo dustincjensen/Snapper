@@ -80,6 +80,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Common\ViewModelBase.cs" />
+    <Compile Include="KeyBindEnum.cs" />
     <Compile Include="Views\KeyBindings.xaml.cs">
       <DependentUpon>KeyBindings.xaml</DependentUpon>
     </Compile>
@@ -92,7 +93,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Common\DelegateCommand.cs" />
     <Compile Include="MoveActiveWindow.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

@@ -12,17 +12,19 @@ namespace Snapper.Views
     public class KeyBindingsModel : ViewModelBase
     {
         private static bool GLOBAL_EDIT_MODE;
-        private readonly Action<Hotkeys.GlobalHotKey> _hotKeyAction;
+        private readonly Action<KeyBindEnum> _hotKeyAction;
+        private readonly KeyBindEnum _purpose;
 
         private string _display;
         private bool _editingMode;
         private Hotkeys.GlobalHotKey _hotKey;
-        private ModifierKeys _modifierKeys = ModifierKeys.None;        
+        private ModifierKeys _modifierKeys = ModifierKeys.None;
 
-        public KeyBindingsModel(string label, Action<Hotkeys.GlobalHotKey> hotKeyAction)
+        public KeyBindingsModel(string label, Action<KeyBindEnum> hotKeyAction, KeyBindEnum purpose)
         {
             Label = label;
             _hotKeyAction = hotKeyAction;
+            _purpose = purpose;
         }
 
         public string Label { get; set; } 
@@ -123,7 +125,7 @@ namespace Snapper.Views
         {
             if (!GLOBAL_EDIT_MODE)
             {
-                _hotKeyAction.Invoke(globalHotKey);
+                _hotKeyAction.Invoke(_purpose);
             }
         }
     }
