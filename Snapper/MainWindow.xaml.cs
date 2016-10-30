@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -14,14 +16,18 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Snapper.Views;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
 namespace Snapper
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        private List<KeyBindings> _keyBindingsList;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -37,59 +43,49 @@ namespace Snapper
             base.OnStateChanged(args);
         }
         
-
-        private Hotkeys.GlobalHotKey _numpad1_HotKey;
-        private Hotkeys.GlobalHotKey _numpad2_HotKey;
-        private Hotkeys.GlobalHotKey _numpad3_HotKey;
-        private Hotkeys.GlobalHotKey _numpad4_HotKey;
-        private Hotkeys.GlobalHotKey _numpad5_HotKey;
-        private Hotkeys.GlobalHotKey _numpad6_HotKey;
-        private Hotkeys.GlobalHotKey _numpad7_HotKey;
-        private Hotkeys.GlobalHotKey _numpad8_HotKey;
-        private Hotkeys.GlobalHotKey _numpad9_HotKey;
-        private Hotkeys.GlobalHotKey _numpad0_HotKey;
-
         private void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
         {
             _LoadHotkeys();
             _SetupNotifyIcon();
 
-            WindowState = WindowState.Minimized;
+            //WindowState = WindowState.Minimized;
+        }
+
+        public List<KeyBindings> KeyBindingsList
+        {
+            get { return _keyBindingsList; }
+            private set
+            {
+                _keyBindingsList = value;
+                OnPropertyChanged();
+            }
         }
 
         private void _LoadHotkeys()
-        {
-            _numpad1_HotKey = new Hotkeys.GlobalHotKey(ModifierKeys.Control | ModifierKeys.Alt, Key.NumPad1, this);
-            _numpad2_HotKey = new Hotkeys.GlobalHotKey(ModifierKeys.Control | ModifierKeys.Alt, Key.NumPad2, this);
-            _numpad3_HotKey = new Hotkeys.GlobalHotKey(ModifierKeys.Control | ModifierKeys.Alt, Key.NumPad3, this);
-            _numpad4_HotKey = new Hotkeys.GlobalHotKey(ModifierKeys.Control | ModifierKeys.Alt, Key.NumPad4, this);
-            _numpad5_HotKey = new Hotkeys.GlobalHotKey(ModifierKeys.Control | ModifierKeys.Alt, Key.NumPad5, this);
-            _numpad6_HotKey = new Hotkeys.GlobalHotKey(ModifierKeys.Control | ModifierKeys.Alt, Key.NumPad6, this);
-            _numpad7_HotKey = new Hotkeys.GlobalHotKey(ModifierKeys.Control | ModifierKeys.Alt, Key.NumPad7, this);
-            _numpad8_HotKey = new Hotkeys.GlobalHotKey(ModifierKeys.Control | ModifierKeys.Alt, Key.NumPad8, this);
-            _numpad9_HotKey = new Hotkeys.GlobalHotKey(ModifierKeys.Control | ModifierKeys.Alt, Key.NumPad9, this);
-            _numpad1_HotKey.HotKeyPressed += _MoveWindowOnHotKeyPressed;
-            _numpad2_HotKey.HotKeyPressed += _MoveWindowOnHotKeyPressed;
-            _numpad3_HotKey.HotKeyPressed += _MoveWindowOnHotKeyPressed;
-            _numpad4_HotKey.HotKeyPressed += _MoveWindowOnHotKeyPressed;
-            _numpad5_HotKey.HotKeyPressed += _MoveWindowOnHotKeyPressed;
-            _numpad6_HotKey.HotKeyPressed += _MoveWindowOnHotKeyPressed;
-            _numpad7_HotKey.HotKeyPressed += _MoveWindowOnHotKeyPressed;
-            _numpad8_HotKey.HotKeyPressed += _MoveWindowOnHotKeyPressed;
-            _numpad9_HotKey.HotKeyPressed += _MoveWindowOnHotKeyPressed;
-
-            _numpad0_HotKey = new Hotkeys.GlobalHotKey(ModifierKeys.Control | ModifierKeys.Alt, Key.NumPad0, this);
-            _numpad0_HotKey.HotKeyPressed += _ToggleWindowMonitorOnHotKeyPressed;
+        {           
+            KeyBindingsList = new List<KeyBindings>
+            {
+                new KeyBindings {Label = "Swap Monitors", HotKeyAction = ToggleWindowMonitorOnHotKeyPressed, Purpose = KeyBindEnum.SwapMonitor},
+                new KeyBindings {Label = "Bottom Left", HotKeyAction = MoveWindowOnHotKeyPressed, Purpose = KeyBindEnum.BottomLeft},
+                new KeyBindings {Label = "Bottom", HotKeyAction = MoveWindowOnHotKeyPressed, Purpose = KeyBindEnum.Bottom},
+                new KeyBindings {Label = "Bottom Right", HotKeyAction = MoveWindowOnHotKeyPressed, Purpose = KeyBindEnum.BottomRight},
+                new KeyBindings {Label = "Left", HotKeyAction = MoveWindowOnHotKeyPressed, Purpose = KeyBindEnum.Left},
+                new KeyBindings {Label = "Mid", HotKeyAction = MoveWindowOnHotKeyPressed, Purpose = KeyBindEnum.Mid},
+                new KeyBindings {Label = "Right", HotKeyAction = MoveWindowOnHotKeyPressed, Purpose = KeyBindEnum.Right},
+                new KeyBindings {Label = "Top Left", HotKeyAction = MoveWindowOnHotKeyPressed, Purpose = KeyBindEnum.TopLeft},
+                new KeyBindings {Label = "Top", HotKeyAction = MoveWindowOnHotKeyPressed, Purpose = KeyBindEnum.Top},
+                new KeyBindings {Label = "Top Right", HotKeyAction = MoveWindowOnHotKeyPressed, Purpose = KeyBindEnum.TopRight}
+            };
         }
 
-        private void _ToggleWindowMonitorOnHotKeyPressed(Hotkeys.GlobalHotKey globalHotKey)
+        public void ToggleWindowMonitorOnHotKeyPressed(KeyBindEnum purpose)
         {
             MoveActiveWindow.ToggleWindowMonitor();
         }
 
-        private void _MoveWindowOnHotKeyPressed(Hotkeys.GlobalHotKey globalHotKey)
+        public void MoveWindowOnHotKeyPressed(KeyBindEnum purpose)
         {
-            MoveActiveWindow.MoveWindow(globalHotKey);
+            MoveActiveWindow.MoveWindow(purpose);
         }
 
         /// <summary>
@@ -124,6 +120,13 @@ namespace Snapper
                 Show();
                 WindowState = WindowState.Normal;
             };
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

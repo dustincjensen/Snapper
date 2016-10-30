@@ -5,24 +5,44 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:Snapper"
+    xmlns:views="clr-namespace:Snapper.Views"
     mc:Ignorable="d"
     Title="Snapper" 
-    Height="350" Width="525"
-    MinHeight="250" MinWidth="450"
+    DataContext="{Binding RelativeSource={RelativeSource Self}}"
+    Height="400" Width="600"
+    MinHeight="400" MinWidth="600"
     Background="#222">
 
     <Grid VerticalAlignment="Stretch" Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" VerticalAlignment="Center">
             <TextBlock Foreground="White" FontSize="32" HorizontalAlignment="Center">
-                    Welcome to Snapper
+                Welcome to Snapper
             </TextBlock>
             <TextBlock Foreground="LightGray" HorizontalAlignment="Center">
-                    To get started, use Ctrl + Alt and the number pad.
+                To get started, use Ctrl + Alt and the number pad.
             </TextBlock>
         </StackPanel>
+
+        <Grid Grid.Row="1" Margin="20,20">
+            <ItemsControl HorizontalAlignment="Stretch" ItemsSource="{Binding KeyBindingsList, UpdateSourceTrigger=PropertyChanged}" Grid.IsSharedSizeScope="True">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="2"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <ContentControl Content="{Binding}" Margin="25"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+                
     </Grid>
 </Window>
