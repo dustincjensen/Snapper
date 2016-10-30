@@ -43,18 +43,6 @@ namespace Snapper
             base.OnStateChanged(args);
         }
         
-
-        //private Hotkeys.GlobalHotKey _numpad1_HotKey;
-        //private Hotkeys.GlobalHotKey _numpad2_HotKey;
-        //private Hotkeys.GlobalHotKey _numpad3_HotKey;
-        //private Hotkeys.GlobalHotKey _numpad4_HotKey;
-        //private Hotkeys.GlobalHotKey _numpad5_HotKey;
-        //private Hotkeys.GlobalHotKey _numpad6_HotKey;
-        //private Hotkeys.GlobalHotKey _numpad7_HotKey;
-        //private Hotkeys.GlobalHotKey _numpad8_HotKey;
-        //private Hotkeys.GlobalHotKey _numpad9_HotKey;
-        //private Hotkeys.GlobalHotKey _swapMonitor_HotKey;
-
         private void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
         {
             _LoadHotkeys();
@@ -74,7 +62,7 @@ namespace Snapper
         }
 
         private void _LoadHotkeys()
-        {
+        {           
             KeyBindingsList = new List<KeyBindings>
             {
                 new KeyBindings {Label = "Swap Monitors", HotKeyAction = ToggleWindowMonitorOnHotKeyPressed, Purpose = KeyBindEnum.SwapMonitor},

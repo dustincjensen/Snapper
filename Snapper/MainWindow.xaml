@@ -29,7 +29,7 @@
             </TextBlock>
         </StackPanel>
 
-        <Grid Grid.Row="1" Margin="50,20">
+        <Grid Grid.Row="1" Margin="20,20">
             <ItemsControl HorizontalAlignment="Stretch" ItemsSource="{Binding KeyBindingsList, UpdateSourceTrigger=PropertyChanged}" Grid.IsSharedSizeScope="True">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>

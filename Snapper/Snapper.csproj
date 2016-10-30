@@ -81,6 +81,7 @@
     </ApplicationDefinition>
     <Compile Include="Common\ViewModelBase.cs" />
     <Compile Include="KeyBindEnum.cs" />
+    <Compile Include="KeyBindSettings.cs" />
     <Compile Include="Views\KeyBindings.xaml.cs">
       <DependentUpon>KeyBindings.xaml</DependentUpon>
     </Compile>
