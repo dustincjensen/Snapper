@@ -18,6 +18,7 @@ Provide the ability to organize your windows via the numpad.
 7. Yay?
 
 ## Keybinds
+Keybinds are customizable in version 1.1. However if you do not set any customized, the following are the defaults.
 - **Ctrl** + **Alt** + 0 = Swap monitors
 - **Ctrl** + **Alt** + 1 = Bottom Left
 - **Ctrl** + **Alt** + 2 = Bottom Mid
