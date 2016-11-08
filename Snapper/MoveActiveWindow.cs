@@ -37,6 +37,10 @@ namespace Snapper
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool GetWindowRect(IntPtr hWnd, out Rectangle lpRect);
 
+        // TODO http://www.pinvoke.net/default.aspx/user32.getwindowplacement
+        // This will allow me to know whether a window is maximized or not.
+        // No actions should take place currently until I decide a course of action
+        // of how I want to handle when someone maximizes a window, if at all.
 
         private static class SWP
         {
@@ -78,7 +82,9 @@ namespace Snapper
             // [-2, -1,  0]
             // [-1,  0,  1]
             // [ 0,  1,  2]
-            var newX = (activeWindow.X+7) + workingArea.Width < maxX
+
+            // +8 seems to account for when it is maximized.
+            var newX = (activeWindow.X+8) + workingArea.Width < maxX
                 ? activeWindow.X + workingArea.Width
                 : activeWindow.X - workingArea.Width;
 
