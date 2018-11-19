@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Hotkeys;
 using Snapper.Common;
@@ -17,7 +12,7 @@ namespace Snapper.Views
         private readonly KeyBindEnum _purpose;
         private string _display;
         private bool _editingMode;
-        private Hotkeys.GlobalHotKey _hotKey;
+        private GlobalHotKey _hotKey;
         private ModifierKeys _modifierKeys = ModifierKeys.None;
 
         public KeyBindingsModel(string label, Action<KeyBindEnum> hotKeyAction, KeyBindEnum purpose)
@@ -29,8 +24,8 @@ namespace Snapper.Views
             var settingsKeyBind = KeyBindSettings.GetSetting(purpose);
             if (settingsKeyBind != null && settingsKeyBind.Item2 != Key.None)
             {
-                _RegisterHotKey(settingsKeyBind.Item1, settingsKeyBind.Item2);
-                Display = _GetDisplay(settingsKeyBind.Item1, settingsKeyBind.Item2);
+                RegisterHotKey(settingsKeyBind.Item1, settingsKeyBind.Item2);
+                Display = GetDisplay(settingsKeyBind.Item1, settingsKeyBind.Item2);
             }
         }
 
@@ -46,11 +41,15 @@ namespace Snapper.Views
             }
         }
 
-        private static string _GetDisplay(ModifierKeys modifierKeys, Key key)
+        private static string GetDisplay(ModifierKeys modifierKeys, Key key)
         {
-            return
-                (modifierKeys != ModifierKeys.None ? modifierKeys.ToString().Replace(",", "+").Replace(" ", "") + "+" : "") +
-                (key != Key.None ? key.ToString() : "");
+            var modifierDisplay = modifierKeys != ModifierKeys.None 
+                ? modifierKeys.ToString().Replace(",", "+").Replace(" ", "") + "+" 
+                : "";
+
+            var keyDisplay = key != Key.None ? key.ToString() : "";
+
+            return $"{modifierDisplay}{keyDisplay}";
         }
 
         public bool EditingMode
@@ -65,28 +64,38 @@ namespace Snapper.Views
 
         public void HandleClick()
         {
-            if (GLOBAL_EDIT_MODE) return;
+            if (GLOBAL_EDIT_MODE)
+            {
+                return;
+            }
 
             EditingMode = true;
             if (_hotKey != null)
             {
                 KeyBindSettings.SetSetting("", _purpose);
                 _hotKey.UnregisterHotKey();
-                _hotKey.HotKeyPressed -= _HotKeyOnHotKeyPressed;
+                _hotKey.HotKeyPressed -= HotKeyOnHotKeyPressed;
             }
             Display = "";
         }
 
         public void HandleKeyModifiers()
         {
-            if (!EditingMode) return;
+            if (!EditingMode)
+            {
+                return;
+            }
+
             _modifierKeys = Keyboard.Modifiers;
-            Display = _GetDisplay(_modifierKeys, Key.None);
+            Display = GetDisplay(_modifierKeys, Key.None);
         }
 
         public void HandleKeyBind(KeyEventArgs e)
         {
-            if (!EditingMode) return;
+            if (!EditingMode)
+            {
+                return;
+            }
 
             // key is your real pressed key
             var key = e.Key != Key.System ? e.Key : e.SystemKey;
@@ -100,8 +109,8 @@ namespace Snapper.Views
            
             try
             {                
-                _RegisterHotKey(_modifierKeys, key);
-                Display = _GetDisplay(_modifierKeys, key);
+                RegisterHotKey(_modifierKeys, key);
+                Display = GetDisplay(_modifierKeys, key);
                 KeyBindSettings.SetSetting(_modifierKeys + "," + key, _purpose);
             }
             catch (ApplicationException)
@@ -113,13 +122,13 @@ namespace Snapper.Views
             EditingMode = false;
         }
 
-        private void _RegisterHotKey(ModifierKeys modifierKeys, Key key)
+        private void RegisterHotKey(ModifierKeys modifierKeys, Key key)
         {
             _hotKey = new GlobalHotKey(modifierKeys, key, System.Windows.Application.Current.MainWindow);
-            _hotKey.HotKeyPressed += _HotKeyOnHotKeyPressed;
+            _hotKey.HotKeyPressed += HotKeyOnHotKeyPressed;
         }        
 
-        private void _HotKeyOnHotKeyPressed(GlobalHotKey globalHotKey)
+        private void HotKeyOnHotKeyPressed(GlobalHotKey globalHotKey)
         {
             if (!GLOBAL_EDIT_MODE)
             {

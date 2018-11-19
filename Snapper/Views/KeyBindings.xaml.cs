@@ -1,17 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Snapper.Views
 {
@@ -20,15 +10,15 @@ namespace Snapper.Views
     /// </summary>
     public partial class KeyBindings : UserControl
     {
-        private KeyBindingsModel _vm;
+        private KeyBindingsModel _viewModel;
 
         public KeyBindings()
         {
             InitializeComponent();
             Loaded += (sender, args) =>
             {
-                _vm = new KeyBindingsModel(Label, HotKeyAction, Purpose);
-                DataContext = _vm;
+                _viewModel = new KeyBindingsModel(Label, HotKeyAction, Purpose);
+                DataContext = _viewModel;
             };
         }
 
@@ -61,17 +51,17 @@ namespace Snapper.Views
 
         public void OnClick(object sender, RoutedEventArgs e)
         {
-            _vm.HandleClick();
+            _viewModel.HandleClick();
         }
 
         public void KeyModifiers(object sender, KeyEventArgs e)
         {
-            _vm.HandleKeyModifiers();   
+            _viewModel.HandleKeyModifiers();   
         }
 
         public void KeyBind(object sender, KeyEventArgs e)
         {
-            _vm.HandleKeyBind(e);
+            _viewModel.HandleKeyBind(e);
         }
     }
 }
